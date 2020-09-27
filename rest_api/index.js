@@ -1,106 +1,25 @@
+require('dotenv').config()
+
 const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors")
+
+const routes = require("./routes/main");
+const passwordRoutes = require("./routes/password");
+
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
-app.get("/", (req, res) => {
-  console.log("Hi!");
-  res.send("Hello world");
-});
+app.use(cors({ credentials: true, origin: process.env.CORS_ORIGIN }))
 
-app.get("/status", (req, res) => {
-  res.status(200).json({
-    message: "OK",
-    status: 200,
-  });
-});
+// UPDATE EXPRESS SETTINGS
+app.use(bodyParser.urlencoded({ extended: false })); // parse application/x-www-urlencoded
+app.use(bodyParser.json()); // parse application/json
 
-app.post("/signup", (req, res, next) => {
-  console.log(req.body);
-  if (!req.body) {
-    res.status(400).json({
-      message: "Invalid body",
-      status: 400,
-    });
-  } else {
-    res.status(200).json({
-      message: "OK",
-      status: 200,
-    });
-  }
-});
+// SETTING UP ROUTES
 
-app.post("/login", (req, res) => {
-  if (!req.body) {
-    res.status(400).json({
-      message: "Invalid body",
-      status: 400,
-    });
-  } else {
-    res.status(200).json({
-      message: "OK",
-      status: 200,
-    });
-  }
-});
-
-app.post("/logout", (req, res) => {
-  if (!req.body) {
-    res.status(400).json({
-      message: "Invalid body",
-      status: 400,
-    });
-  } else {
-    res.status(200).json({
-      message: "OK",
-      status: 200,
-    });
-  }
-});
-
-app.post("/token", (req, res) => {
-  if (!req.body || !req.body.refreshToken) {
-    res.status(400).json({
-      message: "Invalid body",
-      status: 400,
-    });
-  } else {
-      const { refreshToken } = req.body
-    res.status(200).json({
-      message: `Refresh token requested for token: ${refreshToken}`,
-      status: 200,
-    });
-  }
-});
-
-app.post("/forgot-password", (req, res) => {
-    if (!req.body || !req.body.email) {
-      res.status(400).json({
-        message: "Invalid body",
-        status: 400,
-      });
-    } else {
-      const { email } = req.body;
-      res.status(200).json({
-        message: `Forgotten password requested for email: ${email}`,
-        status: 200,
-      });
-    }
-});
-
-app.post("/reset-password", (req, res) => {
-    if (!req.body || !req.body.email) {
-      res.status(400).json({
-        message: "Invalid body",
-        status: 400,
-      });
-    } else {
-      const { email } = req.body;
-      res.status(200).json({
-        message: `Password reset requested for email: ${email}`,
-        status: 200,
-      });
-    }
-});
+app.use("/", routes);
+app.use("/", passwordRoutes);
 
 // CATCH ALL OTHER ROUTES
 
