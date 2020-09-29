@@ -14,8 +14,12 @@ const PORT = process.env.PORT || 3000;
 // UPDATE EXPRESS SETTINGS
 app.use(bodyParser.urlencoded({ extended: false })); // parse application/x-www-urlencoded
 app.use(bodyParser.json()); // parse application/json
-app.use(cookieParser())
+app.use(cookieParser());
 app.use(cors({ credentials: true, origin: process.env.CORS_ORIGIN }));
+
+// REQUIRE PASSWORD AUTH
+
+require("./auth/auth");
 
 // SETTING UP ROUTES
 

@@ -8,18 +8,18 @@ passport.use(
     {
       usernameField: "email",
       passwordField: "password",
-      passReqToCallback: true
+      passReqToCallback: true,
     },
-    (request, email, password, done) => {
-        console.log(email, password)
-        console.log(request.body)
+    async (request, email, password, done) => {
+      console.log(email, password);
+      console.log(request.body);
 
-        const { username } = request.body
-        if (username && username !== "error") {
-            return done(null, { name: "Joe" })
-        } else {
-            return done(new Error('invalid user'))
-        }
+      const { username } = request.body;
+      if (username && username !== "error") {
+        return done(null, { name: "joe" });
+      } else {
+        return done(new Error("invalid user"));
+      }
     }
   )
 );
@@ -31,17 +31,17 @@ passport.use(
   new localStrategy.Strategy(
     {
       usernameField: "email",
-      passwordField: "password"
+      passwordField: "password",
     },
     (email, password, done) => {
       if (email !== "joe@test.com") {
-        return done(new Error('User not found'), false);
-      }  
+        return done(new Error("User not found"), false);
+      }
       if (password !== "test") {
-        return done(new Error("invaild password"), false);
+        return done(new Error("invalid password"), false);
       }
 
-      return done(null, { name: "Joe" })
+      return done(null, { name: "Joe" });
     }
   )
 );
